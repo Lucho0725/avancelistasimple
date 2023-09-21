@@ -1,0 +1,80 @@
+#include <iostream>
+
+// Espacio de nombres para evitar usar "std::" repetidamente
+using namespace std;
+
+template <typename T>
+class ListaSimple {
+public:
+    ListaSimple() : cabeza(nullptr) {}
+
+    // Método para insertar un elemento en la lista
+    void Insertar(const T& elemento) {
+        Nodo* nuevoNodo = new Nodo(elemento);
+        nuevoNodo->siguiente = cabeza;
+        cabeza = nuevoNodo;
+    }
+
+    // Método para buscar un elemento en la lista
+    bool Buscar(const T& elemento) {
+        Nodo* actual = cabeza;
+        while (actual) {
+            if (actual->valor == elemento) {
+                return true;
+            }
+            actual = actual->siguiente;
+        }
+        return false;
+    }
+
+    // Método para ordenar la lista (usaremos un algoritmo simple de selección)
+    void Ordenar() {
+        if (!cabeza) {
+            return;
+        }
+
+        Nodo* actual = cabeza;
+        while (actual) {
+            Nodo* minimo = actual;
+            Nodo* siguiente = actual->siguiente;
+            while (siguiente) {
+                if (siguiente->valor < minimo->valor) {
+                    minimo = siguiente;
+                }
+                siguiente = siguiente->siguiente;
+            }
+            swap(actual->valor, minimo->valor);
+            actual = actual->siguiente;
+        }
+    }
+
+private:
+    struct Nodo {
+        T valor;
+        Nodo* siguiente;
+
+        Nodo(const T& val) : valor(val), siguiente(nullptr) {}
+    };
+
+    Nodo* cabeza;
+};
+
+int main() {
+    ListaSimple<int> lista;
+
+    lista.Insertar(3);
+    lista.Insertar(1);
+    lista.Insertar(2);
+
+    // Buscar un elemento en la lista
+    if (lista.Buscar(2)) {
+        cout << "El elemento 2 se encuentra en la lista." << endl;
+    } else {
+        cout << "El elemento 2 no se encuentra en la lista." << endl;
+    }
+
+    // Ordenar la lista
+    lista.Ordenar();
+
+    return 0;
+}
